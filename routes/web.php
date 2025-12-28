@@ -1,11 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LandingController;
 use App\Http\Controllers\CustomerAuthController;
 use App\Http\Controllers\ShipmentController;
 
-Route::get('/', [LandingController::class, 'index'])->name('home');
+Route::get('/', function () {
+    return 'Sheel Express is running ✅';
+})->name('home');
 
 /** زر دخول (للأدمن/المندوب لاحقًا) */
 Route::get('/login', fn () => view('auth.login'))->name('login');

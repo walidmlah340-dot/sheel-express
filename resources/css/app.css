@@ -1,11 +1,57 @@
-@import 'tailwindcss';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
-
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+:root{
+  --bg1:#070A12;
+  --bg2:#0B1224;
 }
+
+html,body{ height:100%; }
+
+body{
+  font-family: "Tajawal", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  background:
+    radial-gradient(900px 600px at 10% 10%, rgba(239,68,68,.20), transparent 60%),
+    radial-gradient(900px 600px at 90% 20%, rgba(59,130,246,.14), transparent 55%),
+    radial-gradient(900px 600px at 50% 100%, rgba(34,197,94,.10), transparent 55%),
+    linear-gradient(180deg, var(--bg1), var(--bg2));
+}
+
+.page-enter{ animation: slideUp .35s ease-out; }
+
+.glass{
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 20px 60px rgba(0,0,0,.50);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.grad-border{ position: relative; }
+.grad-border:before{
+  content:"";
+  position:absolute; inset:-1px;
+  border-radius: 28px;
+  background: linear-gradient(120deg, rgba(239,68,68,.7), rgba(59,130,246,.4), rgba(34,197,94,.35));
+  filter: blur(.2px);
+  z-index:-1;
+}
+
+.btn{ @apply rounded-2xl px-4 py-3 font-black transition active:scale-[.98]; }
+.btn-primary{ @apply btn bg-red-500 hover:bg-red-600 text-white shadow-glow; }
+.btn-ghost{ @apply btn bg-white/5 hover:bg-white/10 border border-white/10; }
+
+.inp{
+  @apply w-full rounded-2xl px-4 py-3 bg-black/30 border border-white/10 outline-none
+  focus:border-red-500/60 focus:ring-2 focus:ring-red-500/20 transition;
+}
+
+.navbar{
+  background: rgba(10,12,20,.55);
+  border-top: 1px solid rgba(255,255,255,.10);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.badge{ @apply inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-white/5 border border-white/10; }

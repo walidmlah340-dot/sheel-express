@@ -16,3 +16,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();
+->withMiddleware(function (\Illuminate\Foundation\Configuration\Middleware $middleware): void {
+    $middleware->alias([
+        'customer.verified' => \App\Http\Middleware\EnsureCustomerVerified::class,
+    ]);
+})

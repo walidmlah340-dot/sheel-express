@@ -11,13 +11,14 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+
+        // ✅ تسجيل Middleware التحقق من العميل
+        $middleware->alias([
+            'customer.verified' => \App\Http\Middleware\EnsureCustomerVerified::class,
+        ]);
+
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
-    })->create();
-->withMiddleware(function (\Illuminate\Foundation\Configuration\Middleware $middleware): void {
-    $middleware->alias([
-        'customer.verified' => \App\Http\Middleware\EnsureCustomerVerified::class,
-    ]);
-})
+    })
+    ->create();

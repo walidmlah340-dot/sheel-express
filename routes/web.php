@@ -1,37 +1,31 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
+use App\Http\Controllers\LandingController;
+use App\Http\Controllers\CustomerAuthController;
+use App\Http\Controllers\ShipmentController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [LandingController::class, 'index'])->name('home');
 
-// صفحة الدخول
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
+/** زر دخول (للأدمن/المندوب لاحقًا) */
+Route::get('/login', fn () => view('auth.login'))->name('login');
 
-// تنفيذ الدخول (مؤقت)
-Route::post('/login', function (Request $request) {
-    $request->validate([
-        'email' => 'required|email',
-    ]);
+/** ===== عميل: رقم الجوال + OTP ===== */
+Route::get('/customer/phone', [CustomerAuthController::class, 'showPhone'])->name('customer.phone');
+Route::post('/customer/phone', [CustomerAuthController::class, 'sendOtp'])->name('customer.phone.send');
 
-    Auth::loginUsingId(1, true);
+Route::get('/customer/otp', [CustomerAuthController::class, 'showOtp'])->name('customer.otp');
+Route::post('/customer/otp', [CustomerAuthController::class, 'verifyOtp'])->name('customer.otp.verify');
 
-    return redirect('/dashboard');
-});
+Route::get('/customer/profile', [CustomerAuthController::class, 'showProfile'])->name('customer.profile');
+Route::post('/customer/profile', [CustomerAuthController::class, 'saveProfile'])->name('customer.profile.save');
 
-// لوحة التحكم
-Route::get('/dashboard', function () {
-    if (!Auth::check()) return redirect('/login');
-    return view('dashboard');
-});
+Route::post('/customer/logout', [CustomerAuthController::class, 'logout'])->name('customer.logout');
 
-// تسجيل خروج
-Route::post('/logout', function () {
-    Auth::logout();
-    return redirect('/login');
+/** ===== الشحن (لازم عميل متحقق) ===== */
+Route::middleware(['customer.verified'])->group(function () {
+    Route::get('/ship', [ShipmentController::class, 'create'])->name('ship.create');
+    Route::post('/ship', [ShipmentController::class, 'store'])->name('ship.store');
+    Route::get('/ship/pay/{order}', [ShipmentController::class, 'pay'])->name('ship.pay');
+    Route::post('/ship/pay/{order}', [ShipmentController::class, 'payStore'])->name('ship.pay.store');
 });

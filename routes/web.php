@@ -9,16 +9,9 @@ use App\Http\Controllers\ShipmentController;
 |--------------------------------------------------------------------------
 | Home
 |--------------------------------------------------------------------------
-| حل نهائي لمشكلة View [home] not found
-| لو home موجودة → يفتحها
-| لو لأ → يفتح welcome بدون Error
 */
 Route::get('/', function () {
-    if (view()->exists('home')) {
-        return view('home');
-    }
-
-    return view('welcome');
+    return view('home.blade');
 })->name('home');
 
 /*

@@ -5,8 +5,27 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\PhoneAuthController;
 use App\Http\Controllers\ShipmentController;
 
-Route::get('/', fn () => view('home'))->name('home');
+/*
+|--------------------------------------------------------------------------
+| Home
+|--------------------------------------------------------------------------
+| حل نهائي لمشكلة View [home] not found
+| لو home موجودة → يفتحها
+| لو لأ → يفتح welcome بدون Error
+*/
+Route::get('/', function () {
+    if (view()->exists('home')) {
+        return view('home');
+    }
 
+    return view('welcome');
+})->name('home');
+
+/*
+|--------------------------------------------------------------------------
+| Phone OTP Auth
+|--------------------------------------------------------------------------
+*/
 Route::get('/start', [PhoneAuthController::class, 'showPhoneForm'])->name('phone.start');
 Route::post('/start', [PhoneAuthController::class, 'sendOtp'])->name('phone.send');
 
@@ -15,12 +34,24 @@ Route::post('/otp', [PhoneAuthController::class, 'verifyOtp'])->name('phone.veri
 
 Route::post('/logout', [PhoneAuthController::class, 'logout'])->name('logout');
 
+/*
+|--------------------------------------------------------------------------
+| Profile
+|--------------------------------------------------------------------------
+*/
 Route::get('/me', function () {
-    if (!Auth::check()) return redirect()->route('phone.start');
+    if (!Auth::check()) {
+        return redirect()->route('phone.start');
+    }
+
     return view('profile');
 })->name('profile');
 
-// Shipments
+/*
+|--------------------------------------------------------------------------
+| Shipments (Protected)
+|--------------------------------------------------------------------------
+*/
 Route::middleware(['auth', 'phone.verified'])->group(function () {
     Route::get('/shipments/create', [ShipmentController::class, 'create'])->name('shipments.create');
     Route::post('/shipments', [ShipmentController::class, 'store'])->name('shipments.store');

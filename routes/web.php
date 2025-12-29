@@ -7,16 +7,16 @@ use App\Http\Controllers\ShipmentController;
 
 /*
 |--------------------------------------------------------------------------
-| Home
+| Public Home (SAFE)
 |--------------------------------------------------------------------------
 */
 Route::get('/', function () {
-    return view('home.blade');
+    return view('home'); // resources/views/home.blade.php
 })->name('home');
 
 /*
 |--------------------------------------------------------------------------
-| Phone OTP Auth
+| Phone Auth
 |--------------------------------------------------------------------------
 */
 Route::get('/start', [PhoneAuthController::class, 'showPhoneForm'])->name('phone.start');
@@ -36,7 +36,6 @@ Route::get('/me', function () {
     if (!Auth::check()) {
         return redirect()->route('phone.start');
     }
-
     return view('profile');
 })->name('profile');
 
